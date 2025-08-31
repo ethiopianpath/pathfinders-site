@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ethiopian Pathfinder Club</title> 
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Abyssinica+SIL&family=Poppins:wght@400;600;700&display=swap');
+        
+        :root {
+            --primary: #F9A825;
+            --secondary: #2E7D32;
+            --accent: #D32F2F;
+            --light: #F5F5F5;
+            --dark: #212121;
+        }
+        
+        body {
+             font-family: 'Poppins', sans-serif;
+            background-image: url('yd1.jpg');
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+        }
+
+        .ethio-font {
+            font-family: 'Abyssinica SIL', serif;
+        }
+
+        .header-bg {
+            background: linear-gradient(135deg, #F9A825 0%, #2E7D32 50%, #D32F2F 100%);
+        }
+        
+        .card-3d {
+            transform-style: preserve-3d;
+            transition: all 0.5s ease;
+            box-shadow: 0 20px 30px rgba(0,0,0,0.2);
+        }
+        
+        .card-3d:hover {
+            transform: translateY(-10px) rotateX(5deg);
+        }
+        
+        .cultural-pattern {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="50" height="50" x="0" y="0" fill="%23F9A825"/><rect width="50" height="50" x="50" y="50" fill="%23F9A825"/><rect width="50" height="50" x="0" y="50" fill="%232E7D32"/><rect width="50" height="50" x="50" y="0" fill="%232E7D32"/></svg>');
+            background-size: 50px 50px;
+            opacity: 0.1;
+        }
+        
+        .gallery-item {
+            transition: all 0.3s ease;
+            transform: perspective(1000px) rotateY(0deg);
+        }
+        
+        .gallery-item:hover {
+            transform: perspective(1000px) rotateY(10deg) scale(1.05);
+            z-index: 10;
+        }
+
+        .btn-ethio {
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-ethio:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+        
+        .btn-ethio:active {
+            transform: translateY(1px);
+        }
+        
+        .btn-ethio::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
+            transform: translateX(-100%);
+            transition: all 0.5s ease;
+        }
+        
+        .btn-ethio:hover::after {
+            transform: translateX(100%);
+        }
+        
+        .nav-link {
+            position: relative;
+        }
+        
+        .nav-link::after {
+            content: "";
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background-color: var(--accent);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        
+        .accordion.active .accordion-content {
+            max-height: 500px;
+            transition: max-height 0.5s ease-in;
+        }
+        
+        .rotate-icon {
+            transition: transform 0.3s ease;
+        }
+        
+        .accordion.active .rotate-icon {
+            transform: rotate(180deg);
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        .floating {
+            animation: float 3s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Header with Navigation -->
+    <header class="header-bg text-white shadow-lg sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-2">
+                    <img src="logo.jpg" alt="Pathfinder Logo" class="h-12 w-12 rounded-full border-2 border-white" style="border-radius: 10px;">
+                    <h1 class="text-2xl font-bold ethio-font">Ethiopian Pathfinder Club</h1>
+                </div>
+                
+                <!-- Mobile Menu Button -->
+                <button id="mobile-menu-button" class="md:hidden focus:outline-none">
+                    <i class="fas fa-bars text-2xl"></i>
+                </button>
+                
+                <!-- Desktop Navigation -->
+                <nav class="hidden md:flex space-x-6">
+                    <a href="#home" class="nav-link font-semibold hover:text-yellow-200">Home</a>
+                    <a href="#schedule" class="nav-link font-semibold hover:text-yellow-200">Schedule</a>
+                    <a href="#about" class="nav-link font-semibold hover:text-yellow-200">About</a>
+                    <a href="#gallery" class="nav-link font-semibold hover:text-yellow-200">Gallery</a>
+                    <a href="#register" class="nav-link font-semibold hover:text-yellow-200">Register</a>
+                    <a href="#contact" class="nav-link font-semibold hover:text-yellow-200">Contact</a>
+                </nav>
+            </div>
+            
+            <!-- Mobile Navigation -->
+            <div id="mobile-menu" class="hidden md:hidden mt-4 pb-2">
+                <a href="#home" class="block py-2 hover:bg-green-800 px-2 rounded">Home</a>
+                <a href="#schedule" class="block py-2 hover:bg-green-800 px-2 rounded">Schedule</a>
+                <a href="#about" class="block py-2 hover:bg-green-800 px-2 rounded">About</a>
+                <a href="#gallery" class="block py-2 hover:bg-green-800 px-2 rounded">Gallery</a>
+                <a href="#register" class="block py-2 hover:bg-green-800 px-2 rounded">Register</a>
+                <a href="#contact" class="block py-2 hover:bg-green-800 px-2 rounded">Contact</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="relative overflow-hidden">
+        <div class="cultural-pattern absolute inset-0"></div>
+        <div class="container mx-auto px-4 py-20 relative z-10">
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 mb-10 md:mb-0">
+                    <h2 class="text-4xl md:text-5xl font-bold text-gray-800 mb-4 ethio-font" style="color:rgb(66, 32, 218);">Welcome to Ethiopian Pathfinder Club</h2>
+                    <p class="text-lg text-gray-700 mb-6" style="color: white;"><B>Building character, developing leadership, and serving our community through faith-based adventures.</B></p>
+                    <div class="flex space-x-4">
+                        <a href="#register" class="btn-ethio">Join Now</a>
+                        <a href="#about" class="btn-ethio bg-gray-800">Learn More</a>
+                    </div>
+                </div>
+                <div class="md:w-1/2 flex justify-center">
+                    <img src="clubs.jpg" alt="Pathfinder Group" class="rounded-lg shadow-2xl border-4 border-white card-3d floating" style="max-height: 350px;">
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Schedule Section -->
+    <section id="schedule" class="py-16 bg-gradient-to-b from-green-50 to-yellow-50">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-12 text-gray-800 ethio-font" style="color: chocolate;">Our Weekly Schedule</h2>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Monday -->
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden card-3d">
+                    <div class="bg-blue-600 py-3 px-4">
+                        <h3 class="text-xl font-bold text-white text-center">Sunday</h3>
+                    </div>
+                    <div class="p-6">
+                        <ul class="space-y-3">
+                            <li class="flex items-start">
+                                <span class="bg-yellow-500 text-white rounded-full w-6 h-6 flex items-center justify-center mr-3 mt-1">1</span>
+                                <span>08:00AM - Bible Study</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="bg-yellow-500 text-white rounded-full w-6 h-6 flex items-center justify-center mr-3 mt-1">2</span>
+                                <span>10:00 AM - Crafts Workshop</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Wednesday -->
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden card-3d">
+                    <div class="bg-green-600 py-3 px-4">
+                        <h3 class="text-xl font-bold text-white text-center">Wednesday</h3>
+                    </div>
+                    <div class="p-6">
+                        <ul class="space-y-3">
+                            <li class="flex items-start">
+                                <span class="bg-yellow-500 text-white rounded-full w-6 h-6 flex items-center justify-center mr-3 mt-1">1</span>
+                                <span>4:00 PM - Outdoor Skills</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="bg-yellow-500 text-white rounded-full w-6 h-6 flex items-center justify-center mr-3 mt-1">2</span>
+                                <span>5:30 PM - Community Service</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Saturday -->
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden card-3d">
+                    <div class="bg-yellow-600 py-3 px-4">
+                        <h3 class="text-xl font-bold text-white text-center">Saturday</h3>
+                    </div>
+                    <div class="p-6">
+                        <ul class="space-y-3">
+                            <li class="flex items-start">
+                                <span class="bg-yellow-500 text-white rounded-full w-6 h-6 flex items-center justify-center mr-3 mt-1">1</span>
+                                <span>9:00 AM - Nature Hike</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="bg-yellow-500 text-white rounded-full w-6 h-6 flex items-center justify-center mr-3 mt-1">3</span>
+                                <span>1:00 PM - Lunch</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-12 text-center">
+                <a href="#" class="btn-ethio inline-flex items-center">
+                    <i class="fas fa-download mr-2"></i> Download Full Schedule
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section (Aim, Law, Pledge) -->
+    <section id="about" class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-12 text-gray-800 ethio-font" style="color: chocolate;">About Pathfinders</h2>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Aim -->
+                <div class="bg-gradient-to-b from-green-100 to-yellow-100 rounded-xl p-6 shadow-lg card-3d" style=" box-shadow: 10px 10px 20px aqua, -10px -10px 20px #ffffff;">
+                    <div class="text-center mb-4">
+                        <i class="fas fa-bullseye text-4xl text-red-600 mb-3"></i>
+                        <h3 class="text-xl font-bold text-gray-800 mb-3 ethio-font">Our Aim</h3>
+                    </div>
+                    <p class="text-gray-700">The Pathfinder Club is part of a global program designed for young people to develop Christ-like characters, cultivate leadership skills, and serve their communities through various activities that promote physical, mental, and spiritual growth.</p>
+                </div>
+                
+                <!-- Law -->
+                <div class="bg-gradient-to-b from-yellow-100 to-green-100 rounded-xl p-6 shadow-lg card-3d" style=" box-shadow: 10px 10px 20px aquamarine, -10px -10px 20px #ffffff;">
+                    <div class="text-center mb-4">
+                        <i class="fas fa-balance-scale text-4xl text-green-600 mb-3"></i>
+                        <h3 class="text-xl font-bold text-gray-800 mb-3 ethio-font">The Pathfinder Law</h3>
+                    </div>
+                    <ol class="list-decimal list-inside space-y-2 text-gray-700">
+                        <li>Keep the morning watch</li>
+                        <li>Do my honest part</li>
+                        <li>Care for my body</li>
+                        <li>keep a level eye</li>
+                        <li>Be courteous and obedient</li>
+                        <li>Walk softly in the sanctuary</li>
+                        <li>Keep a song in my heart</li>
+                        <li>Go on God's errands</li>
+                    </ol>
+                </div>
+                
+                <!-- Pledge -->
+                <div class="bg-gradient-to-b from-red-100 to-yellow-100 rounded-xl p-6 shadow-lg card-3d" style=" box-shadow: 10px 10px 20px gold, -10px -10px 20px #ffffff;">
+                    <div class="text-center mb-4">
+                        <i class="fas fa-hand-holding-heart text-4xl text-yellow-600 mb-3"></i>
+                        <h3 class="text-xl font-bold text-gray-800 mb-3 ethio-font">The Pathfinder Pledge</h3>
+                    </div>
+                    <div class="text-gray-700 italic text-center">
+                        <p class="mb-4">"By the grace of God,</p>
+                        <p class="mb-4">I will be pure, kind, and true.</p>
+                        <p class="mb-4">I will keep the Pathfinder Law.</p>
+                        <p class="mb-4">I will be a servant of God</p>
+                        <p>and a friend to man."</p>
+                    </div>
+                </div>
+            </div>
+            
+           
+    </section>
+
+    <!-- Photo Gallery -->
+    <section id="gallery" class="py-16 bg-gray-100">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-12 text-gray-800 ethio-font" style="color: chocolate;">Photo Gallery</h2>
+            
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                <div class="gallery-item overflow-hidden rounded-lg shadow-md">
+                    <img src="bible.jpg" alt="Bible Study" class="w-full h-full object-cover hover:scale-110 transition duration-300">
+                </div>
+                <div class="gallery-item overflow-hidden rounded-lg shadow-md">
+                    <img src="more1.jpg" alt="Workshop" class="w-full h-full object-cover hover:scale-110 transition duration-300">
+                </div>
+                <div class="gallery-item overflow-hidden rounded-lg shadow-md">
+                    <img src="community.jpg" alt="Community Service" class="w-full h-full object-cover hover:scale-110 transition duration-300">
+                </div>
+                 <div class="gallery-item overflow-hidden rounded-lg shadow-md">
+                    <img src="eac.jpg" alt="Drill" class="w-full h-full object-cover hover:scale-110 transition duration-300">
+                </div>
+                <div class="gallery-item overflow-hidden rounded-lg shadow-md">
+                    <img src="more4.jpg" alt=" worships" class="w-full h-full object-cover hover:scale-110 transition duration-300">
+                </div>
+                <div class="gallery-item overflow-hidden rounded-lg shadow-md">
+                    <img src="three.jpg" alt="Tolerance" class="w-full h-full object-cover hover:scale-110 transition duration-300">
+                </div>
+                <div class="gallery-item overflow-hidden rounded-lg shadow-md">
+                    <img src="eac1.jpg" alt="Camporee" class="w-full h-full object-cover hover:scale-110 transition duration-300">
+                </div>
+                <div class="gallery-item overflow-hidden rounded-lg shadow-md">
+                    <img src="ua.jpg" alt="Indaction Ceremony" class="w-full h-full object-cover hover:scale-110 transition duration-300">
+                </div>
+            </div>
+            
+            <div class="mt-8 text-center">
+                <a href="sodo.jpg" class="btn-ethio inline-flex items-center">
+                    <i class="fas fa-images mr-2"></i> View More Photos
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Registration Section -->
+    <section id="register" class="py-16 bg-gradient-to-r from-green-500 to-yellow-500">
+        <div class="container mx-auto px-4">
+            <div class="max-w-3xl mx-auto bg-white rounded-xl shadow-2xl overflow-hidden card-3d">
+                <div class="md:flex">
+                    <div class="md:w-1/2 bg-yellow-100 p-8 flex flex-col justify-center">
+                        <h2 class="text-3xl font-bold text-gray-800 mb-4 ethio-font">Join Our Club</h2>
+                        <p class="text-gray-700 mb-6">Become part of our growing Pathfinder family. Open to youth ages 10-15.</p>
+                        <div class="space-y-4">
+                            <div class="flex items-center">
+                                <i class="fas fa-check-circle text-green-600 mr-3"></i>
+                                <span>Develop leadership skills</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fas fa-check-circle text-green-600 mr-3"></i>
+                                <span>Make lifelong friends</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fas fa-check-circle text-green-600 mr-3"></i>
+                                <span>Serve your community</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fas fa-check-circle text-green-600 mr-3"></i>
+                                <span>Explore God's creation</span>
+                            </div>
+                        </div>
+                        <div class="mt-8">
+                            <h3 class="font-bold mb-2">Download Forms:</h3>
+                            <div class="flex space-x-3">
+                                <a href="#" class="btn-ethio bg-blue-600 text-sm py-2 px-3">
+                                    <i class="fas fa-file-pdf mr-1"></i> Application
+                                </a>
+                                <a href="#" class="btn-ethio bg-purple-600 text-sm py-2 px-3">
+                                    <i class="fas fa-file-alt mr-1"></i> Medical Release
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="md:w-1/2 p-8">
+                        <h3 class="text-xl font-bold mb-6 text-center text-gray-800" style="color: chocolate;">Registration Form</h3>
+                        <form class="space-y-4">
+                            <div>
+                                <label class="block text-gray-700 mb-1">Full Name</label>
+                                <input type="text" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 mb-1">Age</label>
+                                <input type="number" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 mb-1">Parent/Guardian Name</label>
+                                <input type="text" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 mb-1">Email</label>
+                                <input type="email" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 mb-1">Phone Number</label>
+                                <input type="tel" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 mb-1">City</label>
+                                <input type="city " class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 mb-1">Any medical conditions we should know about?</label>
+                                <textarea class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500" rows="2"></textarea>
+                            </div>
+                            <button type="submit" class="btn-ethio w-full">Submit Application</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Newsletter Signup -->
+            <div class="max-w-2xl mx-auto mt-12 bg-white rounded-xl shadow-xl p-8 card-3d">
+                <h3 class="text-2xl font-bold text-center mb-4 text-gray-800" style="color: chocolate;">Stay Updated</h3>
+                <p class="text-center text-gray-700 mb-6">Subscribe to our newsletter for updates on events, activities, and more!</p>
+                <form class="flex flex-col sm:flex-row gap-3">
+                    <input type="email" placeholder="Your email address" class="flex-grow px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500">
+                    <button type="submit" class="btn-ethio px-6 py-3">Subscribe</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQs Section -->
+    <section class="py-16 bg-white">
+        <div   class="container mx-auto px-4 max-w-3xl" style=" box-shadow: 10px 10px 20px aqua, -10px -10px 20px #ffffff;">
+            <h2 class="text-3xl font-bold text-center mb-12 text-gray-800 ethio-font" style="color: chocolate;">Frequently Asked Questions</h2>
+            
+            <div class="space-y-4">
+                <!-- FAQ Item 1 -->
+                <div class="border rounded-lg overflow-hidden accordion">
+                    <button class="w-full flex justify-between items-center p-4 bg-gray-50 hover:bg-gray-100 focus:outline-none">
+                        <span class="font-semibold text-lg">What is the age range for Pathfinders?</span>
+                        <i class="fas fa-chevron-down rotate-icon"></i>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="p-4 text-gray-700">
+                            Our Pathfinder Club is open to youth ages 10-15. We have different classes and activities tailored to different age groups within this range.
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- FAQ Item 2 -->
+                <div class="border rounded-lg overflow-hidden accordion">
+                    <button class="w-full flex justify-between items-center p-4 bg-gray-50 hover:bg-gray-100 focus:outline-none">
+                        <span class="font-semibold text-lg">What should my child bring to meetings?</span>
+                        <i class="fas fa-chevron-down rotate-icon"></i>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="p-4 text-gray-700">
+                            For regular meetings: Bible, notebook, pen, and water bottle. For outdoor activities: appropriate clothing, sturdy shoes, and any specific items listed in our weekly announcements.
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- FAQ Item 3 -->
+                <div class="border rounded-lg overflow-hidden accordion">
+                    <button class="w-full flex justify-between items-center p-4 bg-gray-50 hover:bg-gray-100 focus:outline-none">
+                        <span class="font-semibold text-lg">How much does it cost to join?</span>
+                        <i class="fas fa-chevron-down rotate-icon"></i>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="p-4 text-gray-700">
+                            Annual membership fee is 500 ETB which includes the Pathfinder handbook and basic supplies. Some special activities may have additional costs, but we offer scholarships for families in need.
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- FAQ Item 4 -->
+                <div class="border rounded-lg overflow-hidden accordion">
+                    <button class="w-full flex justify-between items-center p-4 bg-gray-50 hover:bg-gray-100 focus:outline-none">
+                        <span class="font-semibold text-lg">Do parents need to volunteer?</span>
+                        <i class="fas fa-chevron-down rotate-icon"></i>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="p-4 text-gray-700">
+                            While not required, parent volunteers are always welcome! We especially need help with transportation, event planning, and skill instruction. All volunteers must complete a background check.
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- FAQ Item 5 -->
+                <div class="border rounded-lg overflow-hidden accordion">
+                    <button class="w-full flex justify-between items-center p-4 bg-gray-50 hover:bg-gray-100 focus:outline-none">
+                        <span class="font-semibold text-lg">How does the club incorporate Ethiopian culture?</span>
+                        <i class="fas fa-chevron-down rotate-icon"></i>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="p-4 text-gray-700">
+                            We incorporate Amharic in our activities, and study Ethiopian Christian history. Many of our service projects also focus on local community needs.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-16 bg-gray-100">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-12 text-gray-800 ethio-font" style="color: chocolate;">Contact Us</h2>
+            
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="bg-white rounded-xl shadow-lg p-8 card-3d" style=" box-shadow: 10px 10px 20px aqua, -10px -10px 20px #ffffff;">
+                    <h3 class="text-xl font-bold mb-6 text-gray-800">Get in Touch</h3>
+                    <form class="space-y-4">
+                        <div>
+                            <label class="block text-gray-700 mb-1">Name</label>
+                            <input type="text" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500">
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 mb-1">Email</label>
+                            <input type="email" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500">
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 mb-1">Subject</label>
+                            <input type="text" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500">
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 mb-1">Message</label>
+                            <textarea class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500" rows="4"></textarea>
+                        </div>
+                        <button type="submit" class="btn-ethio">Send Message</button>
+                    </form>
+                </div>
+                
+                <div class="bg-white rounded-xl shadow-lg p-8 card-3d" style=" box-shadow: 10px 10px 20px aqua, -10px -10px 20px #ffffff;">
+                    <h3 class="text-xl font-bold mb-6 text-gray-800">Our Information</h3>
+                    <div class="space-y-6">
+                        <div class="flex items-start">
+                            <i class="fas fa-map-marker-alt text-red-500 mt-1 mr-4 text-xl"></i>
+                            <div>
+                                <h4 class="font-semibold text-gray-800">Address</h4>
+                                <p class="text-gray-700">Pathfinder Club House<br>Bole Road, Addis Ababa<br>Ethiopia</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <i class="fas fa-phone-alt text-green-500 mt-1 mr-4 text-xl"></i>
+                            <div>
+                                <h4 class="font-semibold text-gray-800">Phone</h4>
+                                <p class="text-gray-700">+251 91 186 3139</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <i class="fas fa-envelope text-yellow-500 mt-1 mr-4 text-xl"></i>
+                            <div>
+                                <h4 class="font-semibold text-gray-800">Email</h4>
+                                <p class="text-gray-700">information@pathfind.org</p>
+                            </div>
+                            </div>
+                        <div class="flex items-start">
+                            <i class="fas fa-envelope text-yellow-500 mt-1 mr-4 text-xl"></i>
+                            <div>
+                                <h4 class="font-semibold text-gray-800">PO Box</h4>
+                                <p class="text-gray-700">12655, Off-Bole Road, Addis Ababa, Ethiopia</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <i class="fas fa-clock text-blue-500 mt-1 mr-4 text-xl"></i>
+                            <div>
+                                <h4 class="font-semibold text-gray-800">Office Hours</h4>
+                                <p class="text-gray-700">Monday-Friday: 9:00 AM - 5:00 PM<br>Saturday: 10:00 AM - 2:00 PM</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-8">
+                        <h4 class="font-semibold text-gray-800 mb-4">Follow Us</h4>
+                        <div class="flex space-x-4">
+                            <a href="https://www.facebook.com/GCYouthMinistries" class="bg-blue-600 text-white w-10 h-10 rounded-full flex items-center justify-center hover:bg-blue-700 transition">
+                                <i class="fab fa-facebook-f"></i>
+                            </a>
+                            <a href="http://www.instagram.com/gcyouth" class="bg-pink-600 text-white w-10 h-10 rounded-full flex items-center justify-center hover:bg-pink-700 transition">
+                                <i class="fab fa-instagram"></i>
+                            </a>
+                            <a href="https://www.youtube.com/GcyouthministriesOrg" class="bg-blue-400 text-white w-10 h-10 rounded-full flex items-center justify-center hover:bg-blue-500 transition">
+                                <i class="fab fa-youtube"></i>
+                            </a>
+                            <a href="https://www.twitter.com/GCYthMin" class="bg-green-500 text-white w-10 h-10 rounded-full flex items-center justify-center hover:bg-green-600 transition">
+                                <i class="fab fa-twitter"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4 ethio-font">Ethiopian Pathfinder Club</h3>
+                    <p class="text-gray-300">Building character, developing leadership, and serving our community through faith-based adventures.</p>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#home" class="text-gray-300 hover:text-yellow-400 transition">Home</a></li>
+                        <li><a href="#schedule" class="text-gray-300 hover:text-yellow-400 transition">Schedule</a></li>
+                        <li><a href="#about" class="text-gray-300 hover:text-yellow-400 transition">About</a></li>
+                        <li><a href="#register" class="text-gray-300 hover:text-yellow-400 transition">Register</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-4">Resources</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-300 hover:text-yellow-400 transition">Downloads</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-yellow-400 transition">FAQ</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-yellow-400 transition">Gallery</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-yellow-400 transition">Blog</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-4">Newsletter</h4>
+                    <p class="text-gray-300 mb-3">Subscribe to get updates on our activities.</p>
+                    <form class="flex">
+                        <input type="email" placeholder="Your email" class="px-3 py-2 text-gray-800 rounded-l focus:outline-none w-full">
+                        <button class="bg-yellow-500 hover:bg-yellow-600 px-3 rounded-r">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-700 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-400 mb-4 md:mb-0">© 2025 Ethiopian Pathfinder Club. All rights reserved.</p>
+                <div class="flex space-x-6">
+                    <a href="#" class="text-gray-400 hover:text-white transition">Privacy Policy</a>
+                    <a href="#" class="text-gray-400 hover:text-white transition">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        document.getElementById('mobile-menu-button').addEventListener('click', function() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        });
+        
+        // Accordion functionality
+        const accordions = document.querySelectorAll('.accordion');
+        accordions.forEach(accordion => {
+            const button = accordion.querySelector('button');
+            button.addEventListener('click', () => {
+                accordion.classList.toggle('active');
+            });
+        });
+        
+        // Smooth scrolling for navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                    
+                    // Close mobile menu if open
+                    const mobileMenu = document.getElementById('mobile-menu');
+                    if (!mobileMenu.classList.contains('hidden')) {
+                        mobileMenu.classList.add('hidden');
+                    }
+                }
+            });
+        });
+        
+        // Add animation to cards when they come into view
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate-fadeIn');
+                }
+            });
+        }, { threshold: 0.1 });
+        
+        document.querySelectorAll('.card-3d').forEach(card => {
+            observer.observe(card);
+        });
+    </script>
+</body>
+</html>
